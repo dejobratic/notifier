@@ -24,9 +24,13 @@ profile.cov
 go.work
 go.work.sum
 
+# Local build cache
+.cache/
+
 # env file
 .env
 
 # Editor/IDE
 # .idea/
 # .vscode/
+**/AGENTS.md
