@@ -16,13 +16,13 @@ definitions:
       name:
         type: string
     type: object
-  handlers.ErrorResponse:
+  response.ErrorResponse:
     properties:
       error:
         example: error message
         type: string
     type: object
-  handlers.MessageResponse:
+  response.MessageResponse:
     properties:
       message:
         example: success message
@@ -53,11 +53,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.MessageResponse'
+            $ref: '#/definitions/response.MessageResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/response.ErrorResponse'
       summary: Create a subscription
       tags:
       - subscriptions
@@ -82,7 +82,7 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/response.ErrorResponse'
       summary: Get a subscription by ID
       tags:
       - subscriptions

@@ -35,5 +35,7 @@ go.work.sum
 
 # Editor/IDE
 # .idea/
-# .vscode/
+.vscode
+
+# LLMs
 **/AGENTS.md

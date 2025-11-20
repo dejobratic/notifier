@@ -2,19 +2,12 @@ package handlers
 
 import (
 	coreapp "notifier/internal/core/application"
+	"notifier/internal/infrastructure/api/response"
 	subapp "notifier/internal/subscriptions/application"
 	"notifier/internal/subscriptions/domain"
 
 	"github.com/gin-gonic/gin"
 )
-
-type ErrorResponse struct {
-	Error string `json:"error" example:"error message"`
-}
-
-type MessageResponse struct {
-	Message string `json:"message" example:"success message"`
-}
 
 // @Summary Get a subscription by ID
 // @Description Get a subscription by ID
@@ -23,19 +16,19 @@ type MessageResponse struct {
 // @Produce json
 // @Param id path string true "Subscription ID"
 // @Success 200 {object} domain.Subscription
-// @Failure 500 {object} ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /subscriptions/{id} [get]
 func GetSubscription(c *gin.Context) {
 	queryHandler := subapp.GetSubscriptionQueryHandler{}
 	query := subapp.GetSubscriptionQuery{
 		ID: domain.SubscriptionID(c.Param("id")),
 	}
-	response, err := queryHandler.Handle(coreapp.BaseQueryContext{}, query)
+	res, err := queryHandler.Handle(coreapp.BaseQueryContext{}, query)
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		response.InternalServerError(c, err)
 		return
 	}
-	c.JSON(200, response)
+	response.Ok(c, res)
 }
 
 // @Summary Create a subscription
@@ -44,8 +37,8 @@ func GetSubscription(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param subscription body subapp.CreateSubscriptionCommand true "Subscription"
-// @Success 200 {object} MessageResponse
-// @Failure 500 {object} ErrorResponse
+// @Success 200 {object} response.MessageResponse
+// @Failure 500 {object} response.ErrorResponse
 // @Router /subscriptions [post]
 func CreateSubscription(c *gin.Context) {
 	command := subapp.CreateSubscriptionCommand{
@@ -55,8 +48,8 @@ func CreateSubscription(c *gin.Context) {
 	commandHandler := subapp.CreateSubscriptionCommandHandler{}
 	err := commandHandler.Handle(coreapp.BaseCommandContext{}, command)
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		response.InternalServerError(c, err)
 		return
 	}
-	c.JSON(200, gin.H{"message": "Subscription created successfully"})
+	response.Ok(c, response.MessageResponse{Message: "Subscription created successfully"})
 }
