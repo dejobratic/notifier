@@ -1,4 +1,33 @@
 basePath: /
+definitions:
+  application.CreateSubscriptionCommand:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  domain.Subscription:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  handlers.ErrorResponse:
+    properties:
+      error:
+        example: error message
+        type: string
+    type: object
+  handlers.MessageResponse:
+    properties:
+      message:
+        example: success message
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -6,19 +35,55 @@ info:
   title: Notifier API
   version: "1.0"
 paths:
-  /home:
+  /subscriptions:
+    post:
+      consumes:
+      - application/json
+      description: Create a subscription
+      parameters:
+      - description: Subscription
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/application.CreateSubscriptionCommand'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Create a subscription
+      tags:
+      - subscriptions
+  /subscriptions/{id}:
     get:
       consumes:
       - application/json
-      description: Returns the home page message
+      description: Get a subscription by ID
+      parameters:
+      - description: Subscription ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
-      - text/plain
+      - application/json
       responses:
         "200":
-          description: This is my home page
+          description: OK
           schema:
-            type: string
-      summary: Home page
+            $ref: '#/definitions/domain.Subscription'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get a subscription by ID
       tags:
-      - home
+      - subscriptions
 swagger: "2.0"

@@ -1,5 +1,24 @@
 # notifier
 
+## Quick Start
+
+### Development
+
+For development, use the convenience command that generates docs and starts the server:
+
+```bash
+make dev
+```
+
+### Available Commands
+
+- `make dev` - Generate Swagger docs and run the application (development mode)
+- `make build` - Build the application binary
+- `make docs` - Generate Swagger documentation
+- `make run` - Build and run the application
+- `make test` - Run tests
+- `make clean` - Clean build artifacts and generated docs
+
 ## Swagger Documentation
 
 This project uses [swaggo/swag](https://github.com/swaggo/swag) for API documentation.
@@ -14,10 +33,10 @@ When you start the application, Swagger UI will automatically open in your brows
 After adding or modifying API endpoints with Swagger annotations, regenerate the docs:
 
 ```bash
-swag init
+make docs
 ```
 
-Or if `swag` is not in your PATH:
+Or manually:
 
 ```bash
 go run github.com/swaggo/swag/cmd/swag@latest init
